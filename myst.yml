@@ -1,0 +1,15 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  id: 6b9ce622-4b44-4c70-b8dd-5a4412567bd5
+  # title:
+  # description:
+  # keywords: []
+  # authors: []
+  github: https://github.com/myst-contrib/fog-theme
+  # To autogenerate a Table of Contents, run "myst init --write-toc"
+site:
+  template: book-theme
+  # options:
+  #   favicon: favicon.ico
+  #   logo: site_logo.png

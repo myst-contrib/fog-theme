@@ -20,7 +20,7 @@
       };
     in {
       default = pkgs.mkShell {
-        packages = with pkgs; [minijinja];
+        packages = with pkgs; [minijinja mystmd];
       };
     });
   };
