@@ -1,0 +1,81 @@
+{% macro render_children(children) -%}
+{%- for child in children %}
+{{ render(child) }}
+{% endfor -%}
+{%- endmacro %}
+
+{% macro render_inline_children(children) -%}
+{% for child in children -%}
+{{ render(child) }}
+{%- endfor %}
+{%- endmacro %}
+
+{% macro render_paragraph(node) -%}
+<p>{{ render_inline_children(node.children) }}</p>
+{%- endmacro %}
+
+{% macro render_strong(node) -%}
+<b>{{ render_inline_children(node.children) }}</b>
+{%- endmacro %}
+
+{% macro render_emphasis(node) -%}
+<em>{{ render_inline_children(node.children) }}</em>
+{%- endmacro %}
+
+{% macro render_text(node) -%}
+{{ node.value }}
+{%- endmacro %}
+
+{% macro render_root(node) -%}
+{{ render_children(node.children) }}
+{%- endmacro %}
+
+{% macro render_block(node) -%}
+{{ render_children(node.children) }}
+{%- endmacro %}
+
+{% macro render_image(node) -%}
+<img src="{{node.url}}">{{ render_inline_children(node.children) }}</img>
+{%- endmacro %}
+
+{% macro render_details(node) -%}
+<details>
+{{ render_children(node.children) }}
+</details>
+{%- endmacro %}
+
+{% macro render_code(node) -%}
+<pre>
+{{ node.value }}
+</pre>
+{%- endmacro %}
+
+{% macro render_summary(node) -%}
+<summary>{{ render_inline_children(node.children) }}</summary>
+{%- endmacro %}
+
+{% macro render(node) -%}
+{%- if node.type == "root" -%}
+{{ render_root(node) }}
+{%- elif node.type == "paragraph" -%}
+{{ render_paragraph(node) }}
+{%- elif node.type == "block" -%}
+{{ render_block(node) }}
+{%- elif node.type == "emphasis" -%}
+{{ render_emphasis(node) }}
+{%- elif node.type == "image" -%}
+{{ render_image(node) }}
+{%- elif node.type == "strong" -%}
+{{ render_strong(node) }}
+{%- elif node.type == "text" -%}
+{{ render_text(node) }}
+{%- elif node.type == "details" -%}
+{{ render_details(node) }}
+{%- elif node.type == "summary" -%}
+{{ render_summary(node) }}
+{%- elif node.type == "code" -%}
+{{ render_code(node) }}
+{%- else -%}
+Unknown node '{{ node.type  }}'
+{%- endif -%}
+{%- endmacro %}
