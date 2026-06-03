@@ -1,0 +1,14 @@
+type: root
+children:
+  - type: block
+    children:
+      - type: paragraph
+        children:
+          - type: text
+            value: 'I’m '
+          - type: strong
+            children:
+              - type: text
+                value: bold
+          - type: text
+            value: ' and scary!'
