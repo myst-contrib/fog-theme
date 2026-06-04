@@ -1,0 +1,61 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fog-theme"
+dynamic = ["version"]
+description = 'A Python based theme for Jupyter Book'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Angus Hollands", email = "goosey15@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+
+[project.urls]
+Documentation = "https://github.com/Angus Hollands/fog-theme#readme"
+Issues = "https://github.com/Angus Hollands/fog-theme/issues"
+Source = "https://github.com/Angus Hollands/fog-theme"
+
+[tool.hatch.version]
+path = "src/fog_theme/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/fog_theme tests}"
+
+[tool.coverage.run]
+source_pkgs = ["fog_theme", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/fog_theme/__about__.py",
+]
+
+[tool.coverage.paths]
+fog_theme = ["src/fog_theme", "*/fog-theme/src/fog_theme"]
+tests = ["tests", "*/fog-theme/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
