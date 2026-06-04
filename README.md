@@ -22,7 +22,12 @@ pip install fog-theme
 
 ## Using the Renderer
 
+Start MyST server in content
 ```bash
-myst build --site
-minijinja-cli templates/entrypoint.j2.html _build/site/content/comprehensive.json -a html --trim-blocks --lstrip-blocks
+env -C content myst start --headless
+```
+
+Run the theme server
+```bash
+python -m fog_theme
 ```
