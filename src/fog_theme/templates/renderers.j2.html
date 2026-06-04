@@ -14,6 +14,10 @@
 <p>{{ render_inline_children(node.children) }}</p>
 {%- endmacro %}
 
+{% macro render_link(node) -%}
+<a href="{{ node.url }}">{{ render_inline_children(node.children) }}</a>
+{%- endmacro %}
+
 {% macro render_strong(node) -%}
 <b>{{ render_inline_children(node.children) }}</b>
 {%- endmacro %}
@@ -67,6 +71,8 @@
 {{ render_image(node) }}
 {%- elif node.type == "strong" -%}
 {{ render_strong(node) }}
+{%- elif node.type == "link" -%}
+{{ render_link(node) }}
 {%- elif node.type == "text" -%}
 {{ render_text(node) }}
 {%- elif node.type == "details" -%}
