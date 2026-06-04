@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "esbuild --bundle src/index.mts --outfile=dist/index.mjs --platform=node --format=esm --packages=external",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:watch": "esbuild --bundle src/index.mts --outfile=dist/index.mjs --platform=node --format=esm --packages=external --watch",
+    "start": "pnpm run build && node dist/index.mjs",
+    "start:watch": "nodemon dist/index.mjs",
+    "watch": "run-p build:watch start:watch"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +29,8 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "esbuild": "^0.28.0",
+    "nodemon": "^3.1.14",
+    "npm-run-all2": "^9.0.1",
     "typescript": "^6.0.3"
   }
 }

@@ -1,10 +1,5 @@
 # fog-theme
 
-[![PyPI - Version](https://img.shields.io/pypi/v/fog-theme.svg)](https://pypi.org/project/fog-theme)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fog-theme.svg)](https://pypi.org/project/fog-theme)
-
----
-
 ## Table of Contents
 
 - [Installation](#installation)
@@ -13,7 +8,7 @@
 ## Installation
 
 ```console
-pip install fog-theme
+pnpm install
 ```
 
 ## License
@@ -29,5 +24,5 @@ env -C content myst start --headless
 
 Run the theme server
 ```bash
-python -m fog_theme
+pnpm run start
 ```
