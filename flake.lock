@@ -1,28 +1,5 @@
 {
   "nodes": {
-    "dev-python": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "dir": "python",
-        "lastModified": 1772621537,
-        "narHash": "sha256-/jBAYzRIRkXwykuNrIUqvh6HzWEiMwc+WBswuO5MB94=",
-        "owner": "agoose77",
-        "repo": "dev-flakes",
-        "rev": "45e941722640b75cb55af326151c8a9af52f598b",
-        "type": "github"
-      },
-      "original": {
-        "dir": "python",
-        "owner": "agoose77",
-        "ref": "v10",
-        "repo": "dev-flakes",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1780243769,
@@ -41,7 +18,6 @@
     },
     "root": {
       "inputs": {
-        "dev-python": "dev-python",
         "nixpkgs": "nixpkgs"
       }
     }
