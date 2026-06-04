@@ -24,7 +24,10 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = []
+dependencies = [
+  "minijinja",
+  "aiohttp"
+]
 
 [project.urls]
 Documentation = "https://github.com/Angus Hollands/fog-theme#readme"
