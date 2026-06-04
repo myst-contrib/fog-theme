@@ -20,9 +20,11 @@ async def fetch_page_content(page: str):
             return await response.json()
 
 
-async def fetch_project():
+async def fetch_single_project():
     config = await fetch_config()
-    return config["projects"][0]
+    projects = config["projects"]
+    assert len(projects) == 1
+    return projects[0]
 
 
 def render_page(content: dict) -> str:
@@ -37,13 +39,34 @@ def render_page(content: dict) -> str:
 
 
 @routes.get("/")
-async def hello(request):
-    project = await fetch_project()
+async def main_route(request):
+    project = await fetch_single_project()
 
     index = project["index"]
     index_json = await fetch_page_content(f"{index}.json")
     html = render_page(index_json)
 
+    return web.Response(text=html, content_type="text/html")
+
+
+@routes.get("/{slug:.+}.json")
+async def json_route(request):
+    slug = request.match_info["slug"]
+
+    page_json = await fetch_page_content(f"{slug}.json")
+    return web.json_response(page_json)
+
+
+@routes.get("/{path:.+}")
+async def html_route(request):
+    path = request.match_info["path"]
+
+    parts = path.split("/")
+    slug = ".".join(parts)
+
+    page_json = await fetch_page_content(f"{slug}.json")
+
+    html = render_page(page_json)
     return web.Response(text=html, content_type="text/html")
 
 
