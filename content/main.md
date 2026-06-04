@@ -1,3 +1,5 @@
+# Main
+
 This is **bold** and _italic_.
 
 ![](https://picsum.photos/id/640/400/200)
@@ -11,4 +13,7 @@ Contains a code listing!
 def fn():
     return 1
 ```
+
 :::
+
+See [](./other.md) for more.
