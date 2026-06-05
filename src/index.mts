@@ -1,65 +1,49 @@
-import { Environment } from "minijinja-js";
+import { Readable } from "node:stream";
 import express from "express";
 
-import entrypointTemplate from "./templates/entrypoint.j2.html" with { type: "text" };
-import renderersTemplate from "./templates/renderers.j2.html" with { type: "text" };
+import { fetchProject, fetchCDNPage, transformCDNPage } from "./loader.mjs";
+import { renderPage } from "./renderer.mjs";
 
-const CDN_HOST = "http://localhost:3100";
+const CDN_HOST = new URL("http://localhost:3100");
 
 const app = express();
 const port = 3000;
 
-type Page = any;
-type Config = any;
-
-async function fetchConfig(): Promise<Config> {
-  const response = await fetch(`${CDN_HOST}/config.json`);
-  return await response.json();
-}
-
-async function fetchProject(): Promise<Page> {
-  const config = await fetchConfig();
-  const projects = config.projects;
-  if (projects.length !== 1) {
-    throw new Error();
-  }
-  return projects[0];
-}
-
-async function fetchPageContent(slug: string): Promise<Page> {
-  const response = await fetch(`${CDN_HOST}/content/${slug}.json`);
-  return await response.json();
-}
-
-async function renderPage(content: Page): Promise<string> {
-  const env = new Environment();
-
-  env.addTemplate("entrypoint.j2.html", entrypointTemplate);
-  env.addTemplate("renderers.j2.html", renderersTemplate);
-
-  return env.renderTemplate("entrypoint.j2.html", content);
-}
-
 app.get("/", async (req, res) => {
-  const project = await fetchProject();
+  const project = await fetchProject(CDN_HOST);
   const index = project.index;
-  const indexJson = await fetchPageContent(index);
-  const html = await renderPage(indexJson);
+
+  const cdnPage = await fetchCDNPage(CDN_HOST, index);
+  const pageJSON = await transformCDNPage(cdnPage);
+  const html = await renderPage(pageJSON);
   res.send(html);
 });
 
+// Static assets
+app.get("/static/*path", async (req, res) => {
+  const path = req.params.path;
+  const cdnURL = new URL(path.join("/"), CDN_HOST);
+  const cdnResponse = await fetch(cdnURL);
+  // FIXME assert
+  Readable.fromWeb(cdnResponse.body!).pipe(res);
+});
+
+// Page JSON
 app.get("/*slug.json", async (req, res) => {
   const [slug] = req.params.slug;
 
-  const pageJson = await fetchPageContent(slug);
-  res.json(pageJson);
+  const cdnPage = await fetchCDNPage(CDN_HOST, slug);
+  const pageJSON = await transformCDNPage(cdnPage);
+  res.json(pageJSON);
 });
 
+// Page HTML
 app.get("/*slug", async (req, res) => {
   const [slug] = req.params.slug;
 
-  const pageJson = await fetchPageContent(slug);
-  const html = await renderPage(pageJson);
+  const cdnPage = await fetchCDNPage(CDN_HOST, slug);
+  const pageJSON = await transformCDNPage(cdnPage);
+  const html = await renderPage(pageJSON);
   res.send(html);
 });
 
