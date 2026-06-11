@@ -2,6 +2,7 @@ import { Readable } from "node:stream";
 import path from "node:path";
 import { fileURLToPath } from "url";
 import express from "express";
+import type { Response } from "express";
 
 import { fetchProject, fetchCDNPage, transformCDNPage } from "./loader.mjs";
 import { renderPage } from "./renderer.mjs";
@@ -14,15 +15,6 @@ const port = 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.get("/", async (req, res) => {
-  const project = await fetchProject(CDN_HOST);
-  const index = project.index;
-
-  const cdnPage = await fetchCDNPage(CDN_HOST, index);
-  const pageJSON = await transformCDNPage(cdnPage);
-  const html = await renderPage(pageJSON);
-  res.send(html);
-});
 // Static assets
 app.use("/build", express.static(path.join(__dirname, "static")));
 
@@ -30,28 +22,47 @@ app.use("/build", express.static(path.join(__dirname, "static")));
 app.get("/static/*path", async (req, res) => {
   const path = req.params.path;
   const cdnURL = new URL(path.join("/"), CDN_HOST);
-  const cdnResponse = await fetch(cdnURL);
+  let cdnResponse;
+  try {
+    cdnResponse = await fetch(cdnURL);
+  } catch (e) {
+    return res.status(404).send(String(e));
+  }
   // FIXME assert
   Readable.fromWeb(cdnResponse.body!).pipe(res);
 });
 
 // Page JSON
-app.get("/*slug.json", async (req, res) => {
-  const [slug] = req.params.slug;
+app.get("/:slug.json", async (req, res) => {
+  const slug = req.params.slug!;
 
-  const cdnPage = await fetchCDNPage(CDN_HOST, slug);
-  const pageJSON = await transformCDNPage(cdnPage);
-  res.json(pageJSON);
+  // Try to fetch the page
+  let cdnPage;
+  try {
+    cdnPage = await fetchCDNPage(CDN_HOST, slug);
+  } catch (e) {
+    res.status(404).send(String(e));
+    return;
+  }
+  res.json(await transformCDNPage(cdnPage));
 });
 
 // Page HTML
-app.get("/*slug", async (req, res) => {
-  const [slug] = req.params.slug;
+app.get("/{*slug}", async (req, res) => {
+  const project = await fetchProject(CDN_HOST);
+  const parts = req.params.slug ?? [];
+  const slug = parts.length ? parts.join(".") : project.index;
 
-  const cdnPage = await fetchCDNPage(CDN_HOST, slug);
+  // Try to fetch the page
+  let cdnPage;
+  try {
+    cdnPage = await fetchCDNPage(CDN_HOST, slug);
+  } catch (e) {
+    res.status(404).send(String(e));
+    return;
+  }
   const pageJSON = await transformCDNPage(cdnPage);
-  const html = await renderPage(pageJSON);
-  res.send(html);
+  res.send(await renderPage(pageJSON));
 });
 
 app.listen(port, () => {
