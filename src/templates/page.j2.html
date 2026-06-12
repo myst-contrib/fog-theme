@@ -18,9 +18,8 @@
       </nav>
     </header>
     <main>
-      <article>
-        <section>{{ render(mdast) }}</section>
-      </article>
+      <h1>{{ frontmatter.title }}</h1>
+      <article>{{ render(mdast) }}</article>
     </main>
 
     <footer></footer>

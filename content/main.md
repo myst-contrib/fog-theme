@@ -2,7 +2,10 @@
 
 This is **bold** and _italic_.
 
-![](https://picsum.photos/id/640/400/200)
+:::{figure} https://picsum.photos/id/640/400/200
+:label: fig-1
+This is a figure
+:::
 
 :::{dropdown} Summary
 Body of the dropdown.
@@ -15,5 +18,7 @@ def fn():
 ```
 
 :::
+
+What is @fig-1
 
 See [](./other.md) for more.

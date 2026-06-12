@@ -11,19 +11,19 @@
 {%- endmacro %}
 
 {% macro render_paragraph(node) -%}
-<p>{{ render_inline_children(node.children) }}</p>
+<p class="{{ node.class }}">{{ render_inline_children(node.children) }}</p>
 {%- endmacro %}
 
 {% macro render_link(node) -%}
-<a href="{{ node.url }}">{{ render_inline_children(node.children) }}</a>
+<a class="{{ node.class }}" href="{{ node.url }}">{{ render_inline_children(node.children) }}</a>
 {%- endmacro %}
 
 {% macro render_strong(node) -%}
-<b>{{ render_inline_children(node.children) }}</b>
+<b class="{{ node.class }}">{{ render_inline_children(node.children) }}</b>
 {%- endmacro %}
 
 {% macro render_emphasis(node) -%}
-<em>{{ render_inline_children(node.children) }}</em>
+<em class="{{ node.class }}">{{ render_inline_children(node.children) }}</em>
 {%- endmacro %}
 
 {% macro render_text(node) -%}
@@ -35,27 +35,59 @@
 {%- endmacro %}
 
 {% macro render_block(node) -%}
+<section class="{{ node.class }}"> 
 {{ render_children(node.children) }}
+</section>
 {%- endmacro %}
 
 {% macro render_image(node) -%}
-<img src="{{node.url}}">{{ render_inline_children(node.children) }}</img>
+<img class="{{ node.class }}" src="{{node.url}}">{{ render_inline_children(node.children) }}</img>
+{%- endmacro %}
+
+{% macro render_span(node) -%}
+<span class="{{ node.class }}">{{ render_inline_children(node.children) }}</span>
+{%- endmacro %}
+
+{% macro render_div(node) -%}
+<div class="{{ node.class }}">
+{{ render_children(node.children) }}
+</div>
 {%- endmacro %}
 
 {% macro render_details(node) -%}
-<details>
+<details class="{{ node.class }}">
 {{ render_children(node.children) }}
 </details>
 {%- endmacro %}
 
+{% macro render_container(node) -%}
+<figure class="{{ node.class }} container-{{ node.kind }}">
+{{ render_children(node.children) }}
+</figure>
+{%- endmacro %}
+
+{% macro render_caption(node) -%}
+<figcaption class="{{ node.class }}" >
+{{ render_children(node.children) }}
+</figcaption>
+{%- endmacro %}
+
+{% macro render_caption_number(node) -%}
+<a class="{{ node.class }}" id="{{ node.html_id or node.identifier or node.key }}" >{{ render_inline_children(node.children) }}</a>
+{%- endmacro %}
+
+{% macro render_cross_reference(node) -%}
+{{ render_inline_children(node.children) }}
+{%- endmacro %}
+
 {% macro render_code(node) -%}
-<pre>
+<pre class="{{ node.class }}">
 {{ node.value }}
 </pre>
 {%- endmacro %}
 
 {% macro render_summary(node) -%}
-<summary>{{ render_inline_children(node.children) }}</summary>
+<summary class="{{ node.class }}">{{ render_inline_children(node.children) }}</summary>
 {%- endmacro %}
 
 {% macro render(node) -%}
@@ -81,6 +113,18 @@
 {{ render_summary(node) }}
 {%- elif node.type == "code" -%}
 {{ render_code(node) }}
+{%- elif node.type == "div" -%}
+{{ render_div(node) }}
+{%- elif node.type == "span" -%}
+{{ render_span(node) }}
+{%- elif node.type == "container" -%}
+{{ render_container(node) }}
+{%- elif node.type == "caption" -%}
+{{ render_caption(node) }}
+{%- elif node.type == "captionNumber" -%}
+{{ render_caption_number(node) }}
+{%- elif node.type == "crossReference" -%}
+{{ render_cross_reference(node) }}
 {%- else -%}
 Unknown node '{{ node.type  }}'
 {%- endif -%}

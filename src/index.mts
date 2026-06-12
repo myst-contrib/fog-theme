@@ -7,7 +7,7 @@ import { renderPage } from "./renderer.mjs";
 const CDN_HOST = new URL("http://localhost:3100");
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // Build assets
 app.use("/build", express.static("public"));
