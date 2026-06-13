@@ -124,6 +124,10 @@
 </pre>
 {%- endmacro %}
 
+{% macro render_inline_code(node) -%}
+<code class="myst-{{ node.type }} {{ node.class }}">{{ node.value }}</code>
+{%- endmacro %}
+
 {% macro render_embed(node) -%}
 {{ render_children(node.children)  }}
 {%- endmacro %}
@@ -175,6 +179,8 @@
 {{ render_summary(node) }}
 {%- elif node.type == "code" -%}
 {{ render_code(node) }}
+{%- elif node.type == "inlineCode" -%}
+{{ render_inline_code(node) }}
 {%- elif node.type == "div" -%}
 {{ render_div(node) }}
 {%- elif node.type == "span" -%}
