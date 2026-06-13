@@ -90,8 +90,24 @@
 </pre>
 {%- endmacro %}
 
+{% macro render_embed(node) -%}
+{{ render_children(node.children)  }}
+{%- endmacro %}
+
 {% macro render_summary(node) -%}
 <summary class="{{ node.class }}">{{ render_inline_children(node.children) }}</summary>
+{%- endmacro %}
+
+{% macro render_thematic_break(node) -%}
+<hr />
+{%- endmacro %}
+
+{% macro render_heading(node) -%}
+<h{{ node.depth }}>{{ render_inline_children(node.children) }}</h{{node.depth}}>
+{%- endmacro %}
+
+{% macro render_abbreviation(node) -%}
+<abbr title="{{ node.title }}">{{ render_inline_children(node.children) }}</abbr>
 {%- endmacro %}
 
 {% macro render(node) -%}
@@ -127,8 +143,16 @@
 {{ render_caption(node) }}
 {%- elif node.type == "captionNumber" -%}
 {{ render_caption_number(node) }}
+{%- elif node.type == "embed" -%}
+{{ render_embed(node) }}
 {%- elif node.type == "crossReference" -%}
 {{ render_cross_reference(node) }}
+{%- elif node.type == "thematicBreak" -%}
+{{ render_thematic_break(node) }}
+{%- elif node.type == "heading" -%}
+{{ render_heading(node) }}
+{%- elif node.type == "abbreviation" -%}
+{{ render_abbreviation(node) }}
 {%- else -%}
 Unknown node '{{ node.type  }}'
 {%- endif -%}
