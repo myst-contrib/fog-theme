@@ -8,6 +8,7 @@ import type { Page } from "./types.mts";
 
 export async function renderPage(content: Page): Promise<string> {
   const env = new Environment();
+  env.enablePyCompat();
 
   env.addTemplate("entrypoint.j2.html", entrypointTemplate);
   env.addTemplate("renderers.j2.html", renderersTemplate);

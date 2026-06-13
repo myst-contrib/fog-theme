@@ -41,7 +41,11 @@
 {%- endmacro %}
 
 {% macro render_image(node) -%}
-<img class="{{ node.class }}" src="{{node.url}}">{{ render_inline_children(node.children) }}</img>
+{%- if node.url.endswith("mp4") -%}
+<video class="{{ node.class }}" src="{{ node.url }}" autoplay="" muted="" webkit-playsinline="true" playsinline="" loop=""></video>
+{%- else -%}
+<img class="{{ node.class }}" src="{{node.url}}"></img>
+{%- endif -%}
 {%- endmacro %}
 
 {% macro render_span(node) -%}
