@@ -16,8 +16,11 @@
 
   <body>
     {% block header %}
-    <header>
+    <header class="fog-header">
       <nav>
+        <div class="fog-header-branding">
+            <div>Made with MyST</div>
+        </div>
         <ul>
           <li>
             <a href="https://numfocus.org/donate"> Donate to NumFocus </a>
@@ -25,12 +28,18 @@
         </ul>
       </nav>
     </header>
-    {% endblock %} {% block content %}
-    <main>
-      <h1>{{ frontmatter.title }}</h1>
-      <article>{{ render(mdast) }}</article>
-    </main>
-    {% endblock %} 
+    {% endblock %}
+    <div class="fog-main-container">
+        {% block primary_sidebar %}
+        <div class="fog-primary-sidebar"></div>
+        {% endblock %}
+        {% block content %}
+        <main class="fog-main-content">
+          <h1>{{ frontmatter.title }}</h1>
+          <article>{{ render(mdast) }}</article>
+        </main>
+        {% endblock %} 
+    </div>
     {% block footer %}
     <footer></footer>
     {% endblock %}

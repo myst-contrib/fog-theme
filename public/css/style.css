@@ -5,3 +5,43 @@
 .myst-admonitionTitle {
   background-color: lightblue;
 }
+
+.fog-header {
+  width: 100%;
+  height: 60px;
+  top: 0px;
+  position: sticky;
+  background-color: #fffc;
+  backdrop-filter: blur(8px) opacity(70%);
+  z-index: 30;
+}
+
+.fog-main-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.fog-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 4rem;
+
+  & > nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    & > div.fog-header-branding {
+      display: flex;
+      flex-direction: row;
+      justify-content: start;
+      min-width: 19.5rem;
+    }
+  }
+}
+
+.fog-primary-sidebar {
+  width: 25%;
+}
