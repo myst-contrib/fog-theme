@@ -7,6 +7,9 @@ project:
   # keywords: []
   # authors: []
   github: https://github.com/myst-contrib/fog-theme
+  references:
+    ttw: https://book.the-turing-way.org/
+    guide: https://mystmd.org/guide
   # To autogenerate a Table of Contents, run "myst init --write-toc"
 site:
   template: book-theme
