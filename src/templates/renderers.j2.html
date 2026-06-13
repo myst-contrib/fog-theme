@@ -10,20 +10,32 @@
 {%- endfor %}
 {%- endmacro %}
 
+{% macro render_admonition(node) -%}
+<aside class="myst-{{ node.type }} admonition admonition-{{ node.kind }}{{ node.class }}">
+{{ render_children(node.children) }}
+</aside>
+{%- endmacro %}
+
+{% macro render_admonition_title(node) -%}
+<div class="myst-{{ node.type }} {{ node.class }}">
+{{ render_children(node.children) }}
+</div>
+{%- endmacro %}
+
 {% macro render_paragraph(node) -%}
-<p class="{{ node.class }}">{{ render_inline_children(node.children) }}</p>
+<p class="myst-{{ node.type }} {{ node.class }}">{{ render_inline_children(node.children) }}</p>
 {%- endmacro %}
 
 {% macro render_link(node) -%}
-<a class="{{ node.class }}" href="{{ node.url }}">{{ render_inline_children(node.children) }}</a>
+<a class="myst-{{ node.type }} {{ node.class }}" href="{{ node.url }}">{{ render_inline_children(node.children) }}</a>
 {%- endmacro %}
 
 {% macro render_strong(node) -%}
-<b class="{{ node.class }}">{{ render_inline_children(node.children) }}</b>
+<b class="myst-{{ node.type }} {{ node.class }}">{{ render_inline_children(node.children) }}</b>
 {%- endmacro %}
 
 {% macro render_emphasis(node) -%}
-<em class="{{ node.class }}">{{ render_inline_children(node.children) }}</em>
+<em class="myst-{{ node.type }} {{ node.class }}">{{ render_inline_children(node.children) }}</em>
 {%- endmacro %}
 
 {% macro render_text(node) -%}
@@ -35,49 +47,71 @@
 {%- endmacro %}
 
 {% macro render_block(node) -%}
-<section class="{{ node.class }}"> 
+<section class="myst-{{ node.type }} {{ node.class }}"> 
 {{ render_children(node.children) }}
 </section>
 {%- endmacro %}
 
 {% macro render_image(node) -%}
 {%- if node.url.endswith("mp4") -%}
-<video class="{{ node.class }}" src="{{ node.url }}" autoplay="" muted="" webkit-playsinline="true" playsinline="" loop=""></video>
+<video class="myst-{{ node.type }} {{ node.class }}" src="{{ node.url }}" autoplay="" muted="" webkit-playsinline="true" playsinline="" loop=""></video>
 {%- else -%}
-<img class="{{ node.class }}" src="{{node.url}}"></img>
+<img class="myst-{{ node.type }} {{ node.class }}" src="{{node.url}}"></img>
 {%- endif -%}
 {%- endmacro %}
 
 {% macro render_span(node) -%}
-<span class="{{ node.class }}">{{ render_inline_children(node.children) }}</span>
+<span class="myst-{{ node.type }} {{ node.class }}">{{ render_inline_children(node.children) }}</span>
 {%- endmacro %}
 
 {% macro render_div(node) -%}
-<div class="{{ node.class }}">
+<div class="myst-{{ node.type }} {{ node.class }}">
 {{ render_children(node.children) }}
 </div>
 {%- endmacro %}
 
+{% macro render_table(node) -%}
+<table class="myst-{{ node.type }} {{ node.class }}">
+{{ render_children(node.children) }}
+</table>
+{%- endmacro %}
+
+{% macro render_table_row(node) -%}
+<tr class="myst-{{ node.type }} {{ node.class }}">
+{{ render_children(node.children) }}
+</tr>
+{%- endmacro %}
+
+{% macro render_table_cell(node) -%}
+<td class="myst-{{ node.type }} {{ node.class }}">
+{{ render_children(node.children) }}
+</td>
+{%- endmacro %}
+
+{% macro render_comment(node) -%}
+<!-- {{ node.value }} -->
+{%- endmacro %}
+
 {% macro render_details(node) -%}
-<details class="{{ node.class }}">
+<details class="myst-{{ node.type }} {{ node.class }}">
 {{ render_children(node.children) }}
 </details>
 {%- endmacro %}
 
 {% macro render_container(node) -%}
-<figure class="{{ node.class }} container-{{ node.kind }}">
+<figure class="myst-{{ node.type }} {{ node.class }} container-{{ node.kind }}">
 {{ render_children(node.children) }}
 </figure>
 {%- endmacro %}
 
 {% macro render_caption(node) -%}
-<figcaption class="{{ node.class }}" >
+<figcaption class="myst-{{ node.type }} {{ node.class }}" >
 {{ render_children(node.children) }}
 </figcaption>
 {%- endmacro %}
 
 {% macro render_caption_number(node) -%}
-<a class="{{ node.class }}" id="{{ node.html_id or node.identifier or node.key }}" >{{ render_inline_children(node.children) }}</a>
+<a class="myst-{{ node.type }} {{ node.class }}" id="{{ node.html_id or node.identifier or node.key }}" >{{ render_inline_children(node.children) }}</a>
 {%- endmacro %}
 
 {% macro render_cross_reference(node) -%}
@@ -85,7 +119,7 @@
 {%- endmacro %}
 
 {% macro render_code(node) -%}
-<pre class="{{ node.class }}">
+<pre class="myst-{{ node.type }} {{ node.class }}">
 {{ node.value }}
 </pre>
 {%- endmacro %}
@@ -95,7 +129,15 @@
 {%- endmacro %}
 
 {% macro render_summary(node) -%}
-<summary class="{{ node.class }}">{{ render_inline_children(node.children) }}</summary>
+<summary class="myst-{{ node.type }} {{ node.class }}">{{ render_inline_children(node.children) }}</summary>
+{%- endmacro %}
+
+{% macro render_math(node) -%}
+<div class="myst-{{ node.type }} {{ node.class }}">{{ node.value }}</div>
+{%- endmacro %}
+
+{% macro render_inline_math(node) -%}
+<span class="myst-{{ node.type }} {{ node.class }}">{{ node.value }}</span>
 {%- endmacro %}
 
 {% macro render_thematic_break(node) -%}
@@ -139,6 +181,8 @@
 {{ render_span(node) }}
 {%- elif node.type == "container" -%}
 {{ render_container(node) }}
+{%- elif node.type == "admonition" -%}
+{{ render_admonition(node) }}
 {%- elif node.type == "caption" -%}
 {{ render_caption(node) }}
 {%- elif node.type == "captionNumber" -%}
@@ -153,6 +197,20 @@
 {{ render_heading(node) }}
 {%- elif node.type == "abbreviation" -%}
 {{ render_abbreviation(node) }}
+{%- elif node.type == "math" -%}
+{{ render_math(node) }}
+{%- elif node.type == "inlineMath" -%}
+{{ render_inline_math(node) }}
+{%- elif node.type == "table" -%}
+{{ render_table(node) }}
+{%- elif node.type == "tableRow" -%}
+{{ render_table_row(node) }}
+{%- elif node.type == "tableCell" -%}
+{{ render_table_cell(node) }}
+{%- elif node.type == "admonitionTitle" -%}
+{{ render_admonition_title(node) }}
+{%- elif node.type == "comment" -%}
+{{ render_comment(node) }}
 {%- else -%}
 Unknown node '{{ node.type  }}'
 {%- endif -%}
