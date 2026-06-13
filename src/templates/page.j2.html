@@ -4,15 +4,18 @@
   <head>
     <meta charset="utf-8" />
     <title>{{ frontmatter.title }}</title>
+    {%- block head %}
     <link rel="stylesheet" type="text/css" href="build/css/style.css" />
     <script
       id="MathJax-script"
       async
       src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"
     ></script>
+    {%- endblock %}
   </head>
 
   <body>
+    {% block header %}
     <header>
       <nav>
         <ul>
@@ -22,11 +25,13 @@
         </ul>
       </nav>
     </header>
+    {% endblock %} {% block content %}
     <main>
       <h1>{{ frontmatter.title }}</h1>
       <article>{{ render(mdast) }}</article>
     </main>
-
+    {% endblock %} {% block footer %}
     <footer></footer>
+    {% endblock %}
   </body>
 </html>
