@@ -1,13 +1,23 @@
 import { Readable } from "node:stream";
 import express from "express";
 
-import { fetchProject, fetchCDNPage, transformCDNPage } from "./loader.mjs";
+import {
+  fetchConfig,
+  fetchProject,
+  fetchCDNPage,
+  transformCDNPage,
+  updateLink,
+} from "./loader.mjs";
 import { renderPage } from "./renderer.mjs";
 
 const CDN_HOST = new URL("http://localhost:3100");
 
 const app = express();
 const port = 3001;
+
+function buildHostURL(request: express.Request): string {
+  return `${request.protocol}://${request.host}`;
+}
 
 // Build assets
 app.use("/build", express.static("public"));
@@ -22,14 +32,35 @@ app.get("/static/*path", async (req, res) => {
   } catch (e) {
     return res.status(404).send(String(e));
   }
+
+  res.setHeaders(new Headers(cdnResponse.headers));
   // FIXME assert
   Readable.fromWeb(cdnResponse.body!).pipe(res);
 });
 
 // CDN assets
 app.get("/favicon.ico", async (req, res) => {
-  // For now, temporarily use MyST favicon
-  res.redirect("https://mystmd.org/favicon.ico");
+  const config = await fetchConfig(CDN_HOST);
+  // Get favicon URL
+  const configURL = config.options?.favicon || "https://mystmd.org/favicon.ico";
+  const url = updateLink(configURL, buildHostURL(req));
+
+  const response = await fetch(url).catch(console.error);
+  if (!response || response.status === 404) {
+    res.status(404);
+    return;
+  }
+  const contentType = response.headers.get("Content-Type");
+  if (contentType === undefined) {
+    res.status(500);
+    return;
+  }
+  res.setHeaders(new Headers(response.headers));
+  res.format({
+    [contentType as string]() {
+      Readable.fromWeb(response.body!).pipe(res);
+    },
+  });
 });
 
 // Page JSON
@@ -44,7 +75,7 @@ app.get("/:slug.json", async (req, res) => {
     res.status(404).send(String(e));
     return;
   }
-  res.json(await transformCDNPage(cdnPage));
+  res.json(await transformCDNPage(cdnPage, buildHostURL(req)));
 });
 
 // Page HTML
@@ -61,7 +92,7 @@ app.get("/{*slug}", async (req, res) => {
     res.status(404).send(String(e));
     return;
   }
-  const pageJSON = await transformCDNPage(cdnPage);
+  const pageJSON = await transformCDNPage(cdnPage, buildHostURL(req));
   res.send(await renderPage(pageJSON));
 });
 

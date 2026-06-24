@@ -45,7 +45,7 @@ function rewriteStaticLinks(mdast: Node, updateUrl: (arg0: string) => string) {
   });
 }
 
-function updateLink(url: string) {
+export function updateLink(url: string, host: string) {
   if (!url) return url;
   try {
     const parsed = new URL(url);
@@ -55,10 +55,13 @@ function updateLink(url: string) {
   }
 
   // HACKY FIXME
-  return `/static${url}`;
+  return `${host}/static${url}`;
 }
 
-export async function transformCDNPage(page: Page): Promise<Page> {
-  rewriteStaticLinks(page.mdast, updateLink);
+export async function transformCDNPage(
+  page: Page,
+  host: string,
+): Promise<Page> {
+  rewriteStaticLinks(page.mdast, (url: string) => updateLink(url, host));
   return page;
 }
