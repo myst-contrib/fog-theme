@@ -11,8 +11,18 @@
 {%- endmacro %}
 
 {% macro render_admonition(node) -%}
-<aside class="myst-{{ node.type }} admonition admonition-{{ node.kind }}{{ node.class }}">
+<aside class="myst-{{ node.type }} admonition-{{ node.kind }}{{ node.class }}">
+{% set maybeTitle = node.children[0] -%}
+{% if maybeTitle.type == "admonitionTitle" %}
+{{ render(maybeTitle) }}
+<div class="admonition-body">
+{{ render_children(node.children[1:]) }}
+</div>
+{% else %}
+<div class="admonition-body">
 {{ render_children(node.children) }}
+</div>
+{% endif %}
 </aside>
 {%- endmacro %}
 

@@ -1,7 +1,65 @@
 .myst-admonition {
   border: 1px solid black;
+  .admonition-body {
+    padding: 0.25em 1rem;
+  }
 }
 
 .myst-admonitionTitle {
   background-color: lightblue;
+  padding: 0em 0.25em;
+}
+
+.fog-header {
+  width: 100%;
+  height: 60px;
+  top: 0px;
+  position: sticky;
+  background-color: #fffc;
+  backdrop-filter: blur(8px) opacity(70%);
+  z-index: 30;
+}
+
+.fog-main-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.fog-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 4rem;
+  box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.2);
+
+  & > nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    & > div.fog-header-branding {
+      display: flex;
+      flex-direction: row;
+      justify-content: start;
+      min-width: 19.5rem;
+      margin: 0rem 3rem;
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.fog-primary-sidebar {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+}
+.fog-secondary-sidebar {
+  width: 17rem;
+  display: flex;
+  flex-direction: column;
+}
+
+p {
+  margin: 1.25em 0;
 }
