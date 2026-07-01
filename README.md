@@ -1,4 +1,5 @@
 # Fog theme
+<img width="1830" height="1488" alt="image" src="https://github.com/user-attachments/assets/7e782163-f298-4931-9df9-b59094e50b33" />
 
 The [MyST Book Theme](https://github.com/jupyter-book/myst-theme.git) is a web application built on top of Remix, TypeScript, React, and Tailwind. The use of modern web frameworks makes it easy to build stateful and powerful web applications. The downside of this approach is that it requires an understanding of several complex frameworks, and doesn't lean in to the kinds of SSR skills that many developers are familiar with.
 
