@@ -7,13 +7,15 @@ export async function fetchConfig(cdn: URL): Promise<Config> {
   return await response.json();
 }
 
-export async function fetchProject(cdn: URL): Promise<Page> {
+export async function fetchProject(
+  cdn: URL,
+): Promise<{ project: Config["Projects"][number]; config: Config }> {
   const config = await fetchConfig(cdn);
   const projects = config.projects;
   if (projects.length !== 1) {
     throw new Error();
   }
-  return projects[0];
+  return { config, project: projects[0] };
 }
 
 export async function fetchCDNPage(cdn: URL, slug: string): Promise<Page> {

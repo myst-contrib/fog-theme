@@ -80,7 +80,7 @@ app.get("/:slug.json", async (req, res) => {
 
 // Page HTML
 app.get("/{*slug}", async (req, res) => {
-  const project = await fetchProject(CDN_HOST);
+  const { config, project } = await fetchProject(CDN_HOST);
   const parts = req.params.slug ?? [];
   const slug = parts.length ? parts.join(".") : project.index;
 
@@ -93,7 +93,7 @@ app.get("/{*slug}", async (req, res) => {
     return;
   }
   const pageJSON = await transformCDNPage(cdnPage, buildHostURL(req));
-  res.send(await renderPage(pageJSON, parts));
+  res.send(await renderPage(pageJSON, config, parts));
 });
 
 app.listen(port, () => {

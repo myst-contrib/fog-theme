@@ -4,7 +4,7 @@ import entrypointTemplate from "./templates/entrypoint.j2.html" with { type: "te
 import renderersTemplate from "./templates/renderers.j2.html" with { type: "text" };
 import pageTemplate from "./templates/page.j2.html" with { type: "text" };
 
-import type { Page } from "./types.mts";
+import type { Page, Config } from "./types.mts";
 
 /**
  * Convert an abs path into a page-relative path
@@ -18,7 +18,8 @@ function makeAbsolutePath(path: string, components: string[]) {
 }
 
 export async function renderPage(
-  content: Page,
+  page: Page,
+  config: Config,
   components: string[],
 ): Promise<string> {
   const env = new Environment();
@@ -32,5 +33,5 @@ export async function renderPage(
     makeAbsolutePath(path, components),
   );
 
-  return env.renderTemplate("page.j2.html", content);
+  return env.renderTemplate("page.j2.html", { page, config });
 }
