@@ -93,7 +93,7 @@ app.get("/{*slug}", async (req, res) => {
     return;
   }
   const pageJSON = await transformCDNPage(cdnPage, buildHostURL(req));
-  res.send(await renderPage(pageJSON));
+  res.send(await renderPage(pageJSON, parts));
 });
 
 app.listen(port, () => {
