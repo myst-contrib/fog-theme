@@ -14,7 +14,8 @@ project:
 site:
   template: book-theme
   options:
-    favicon: /home/angus/Downloads/favicon.ico
+    favicon: favicon.ico
+    logo: dog.jpg
   # options:
   #   favicon: favicon.ico
   #   logo: site_logo.png
