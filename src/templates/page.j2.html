@@ -3,10 +3,10 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>{{ frontmatter.title }}</title>
+    <title>{{ page.frontmatter.title }}</title>
     {%- block head %}
     <link rel="icon" href="{{ "/favicon.ico" | make_relative }}" />
-    <link rel="stylesheet" type="text/css" href="build/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ "/build/css/style.css" | make_relative }}"/>
     <script
       id="MathJax-script"
       async
@@ -21,6 +21,9 @@
       <nav>
         <div class="fog-header-branding">
             <div>Made with MyST</div>
+            {% if config.options and config.options.logo %}
+            <img class="fog-header-logo" src="{{ "/static/%s" | format(config.options.logo) | make_relative }}" />
+            {% endif %}
         </div>
       </nav>
     </header>
@@ -31,11 +34,11 @@
         {% endblock %}
         {% block content %}
         <main class="fog-main-content">
-          <h1>{{ frontmatter.title }}</h1>
-          {% if frontmatter.subtitle %}
-          <p>{{ frontmatter.subtitle }}</p>
+          <h1>{{ page.frontmatter.title }}</h1>
+          {% if page.frontmatter.subtitle %}
+          <p>{{ page.frontmatter.subtitle }}</p>
           {% endif %}
-          <article>{{ render(mdast) }}</article>
+          <article>{{ render(page.mdast) }}</article>
         </main>
         {% endblock %} 
         {% block secondary_sidebar %}

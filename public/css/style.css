@@ -45,6 +45,10 @@
       min-width: 19.5rem;
       margin: 0rem 3rem;
       font-size: 1.5rem;
+
+      & > img.fog-header-logo {
+              height: var(--fog-header-height)
+      }
     }
   }
 }
